@@ -2,11 +2,20 @@
 
 Minimal, dependency-free helpers for parsing QTI XML with DOMParser.
 
+## Overview
+
+This library provides small, focused utilities for parsing QTI 3.0 XML using
+the runtime's DOMParser.
+
 ## Install
 
 ```bash
 npm install github:metyatech/qti-xml-core
 ```
+
+## Setup
+
+- Requires a DOMParser implementation in the runtime.
 
 ## Usage
 
@@ -14,6 +23,17 @@ npm install github:metyatech/qti-xml-core
 import { parseAssessmentTestXml, parseResultsXmlRaw, resolveAssessmentHref } from "qti-xml-core";
 ```
 
-## Notes
+## Development commands
 
-- Requires a DOMParser implementation in the runtime.
+```bash
+npm run build
+npm test
+```
+
+## Environment variables
+
+None.
+
+## Publishing
+
+This repository is consumed via GitHub dependency (not published to npm).
