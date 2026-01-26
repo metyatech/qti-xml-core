@@ -1,6 +1,6 @@
 {
   "name": "qti-xml-core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Minimal, dependency-free helpers for parsing QTI 3.0 XML with DOMParser.",
   "license": "MIT",
   "repository": {
@@ -23,6 +23,9 @@
     "test": "npm run build && node --test",
     "prepack": "npm run build",
     "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@xmldom/xmldom": "^0.9.8"
   },
   "devDependencies": {
     "typescript": "^5"

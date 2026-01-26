@@ -41,18 +41,19 @@ export interface QtiRawResults {
   itemResults: QtiRawItemResult[];
 }
 
+import { DOMParser as XmlDomParser } from '@xmldom/xmldom';
+
 const getElementsByLocalName = (root: Element, localName: string): Element[] => {
   const withNamespace = Array.from(root.getElementsByTagNameNS('*', localName));
   if (withNamespace.length > 0) return withNamespace as Element[];
   return Array.from(root.getElementsByTagName(localName));
 };
 
-const domParserAvailable = () => typeof globalThis.DOMParser === 'function';
-
-const matchAttribute = (tag: string, attr: string, xml: string): string | null => {
-  const re = new RegExp(`<\\s*(?:\\w+:)?${tag}\\b[^>]*\\b${attr}\\s*=\\s*(['"])(.*?)\\1`, 'i');
-  const match = xml.match(re);
-  return match ? match[2] : null;
+const parseXml = (xml: string): Document => {
+  if (typeof globalThis.DOMParser === 'function') {
+    return new globalThis.DOMParser().parseFromString(xml, 'application/xml');
+  }
+  return new XmlDomParser().parseFromString(xml, 'application/xml') as unknown as Document;
 };
 
 const parsePositiveInteger = (value: string | null): number | undefined => {
@@ -109,12 +110,9 @@ export const resolveRelativePath = (baseFilePath: string, relativePath: string):
 };
 
 export const extractItemIdentifier = (xml: string): string | null => {
-  if (!domParserAvailable()) {
-    return matchAttribute('qti-assessment-item', 'identifier', xml);
-  }
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(xml, 'application/xml');
+  const doc = parseXml(xml);
   const root = doc.documentElement;
+  if (!root) return null;
   if (root.nodeName === 'parsererror') return null;
   if (root.localName === 'qti-assessment-item') {
     return root.getAttribute('identifier');
@@ -124,9 +122,11 @@ export const extractItemIdentifier = (xml: string): string | null => {
 };
 
 export const parseAssessmentTestXml = (xml: string): AssessmentItemRef[] => {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(xml, 'application/xml');
+  const doc = parseXml(xml);
   const root = doc.documentElement;
+  if (!root) {
+    throw new Error('assessmentTest XML parse failed');
+  }
   if (root.nodeName === 'parsererror') {
     throw new Error('assessmentTest XML parse failed');
   }
@@ -150,29 +150,11 @@ export const parseAssessmentTestXml = (xml: string): AssessmentItemRef[] => {
 };
 
 export const parseAssessmentItemRefsFromXml = (xml: string): AssessmentItemRefParseResult => {
-  if (!domParserAvailable()) {
-    const errors: AssessmentItemRefError[] = [];
-    const itemRefs: AssessmentItemRef[] = [];
-    const re = /<\s*(?:\w+:)?qti-assessment-item-ref\b[^>]*>/gi;
-    let match: RegExpExecArray | null;
-    while ((match = re.exec(xml)) !== null) {
-      const tag = match[0];
-      const identifier = matchAttribute('qti-assessment-item-ref', 'identifier', tag);
-      const href = matchAttribute('qti-assessment-item-ref', 'href', tag);
-      if (!identifier || !href) {
-        errors.push({ code: 'missing-itemref-identifier-or-href' });
-        continue;
-      }
-      itemRefs.push({ identifier, href });
-    }
-    if (itemRefs.length === 0) {
-      errors.push({ code: 'no-itemref' });
-    }
-    return { itemRefs, errors };
-  }
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(xml, 'application/xml');
+  const doc = parseXml(xml);
   const root = doc.documentElement;
+  if (!root) {
+    return { itemRefs: [], errors: [{ code: 'no-itemref' }] };
+  }
   if (root.nodeName === 'parsererror') {
     return { itemRefs: [], errors: [{ code: 'no-itemref' }] };
   }
@@ -195,38 +177,11 @@ export const parseAssessmentItemRefsFromXml = (xml: string): AssessmentItemRefPa
 };
 
 export const parseResultItemRefsFromXml = (xml: string): ResultItemRefParseResult => {
-  if (!domParserAvailable()) {
-    const errors: ResultItemRefError[] = [];
-    const itemRefs: ResultItemRef[] = [];
-    const re = /<\s*(?:\w+:)?itemResult\b[^>]*>/gi;
-    let match: RegExpExecArray | null;
-    while ((match = re.exec(xml)) !== null) {
-      const tag = match[0];
-      const identifier = matchAttribute('itemResult', 'identifier', tag);
-      if (!identifier) {
-        errors.push({ code: 'missing-itemresult-identifier' });
-        continue;
-      }
-      const rawSequenceIndex = matchAttribute('itemResult', 'sequenceIndex', tag);
-      const hasSequenceIndex = rawSequenceIndex !== null;
-      const parsedSequenceIndex = rawSequenceIndex ? Number(rawSequenceIndex) : NaN;
-      const sequenceIndex =
-        hasSequenceIndex && Number.isInteger(parsedSequenceIndex) && parsedSequenceIndex > 0
-          ? parsedSequenceIndex
-          : null;
-      if (hasSequenceIndex && sequenceIndex === null) {
-        errors.push({ code: 'invalid-sequence-index', identifier });
-      }
-      itemRefs.push({ identifier, sequenceIndex, hasSequenceIndex });
-    }
-    if (itemRefs.length === 0) {
-      errors.push({ code: 'no-itemresult' });
-    }
-    return { itemRefs, errors };
-  }
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(xml, 'application/xml');
+  const doc = parseXml(xml);
   const root = doc.documentElement;
+  if (!root) {
+    return { itemRefs: [], errors: [{ code: 'no-itemresult' }] };
+  }
   if (root.nodeName === 'parsererror') {
     return { itemRefs: [], errors: [{ code: 'no-itemresult' }] };
   }
@@ -258,9 +213,11 @@ export const parseResultItemRefsFromXml = (xml: string): ResultItemRefParseResul
 };
 
 export const parseResultsXmlRaw = (xml: string): QtiRawResults => {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(xml, 'application/xml');
+  const doc = parseXml(xml);
   const root = doc.documentElement;
+  if (!root) {
+    throw new Error('results XML parse failed');
+  }
   if (root.nodeName === 'parsererror') {
     throw new Error('results XML parse failed');
   }

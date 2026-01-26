@@ -15,7 +15,7 @@ npm install qti-xml-core
 
 ## Setup
 
-- Requires a DOMParser implementation in the runtime.
+- Uses the runtime DOMParser when available; falls back to @xmldom/xmldom in Node.
 
 ## Usage
 
