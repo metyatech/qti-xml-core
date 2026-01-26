@@ -27,6 +27,7 @@ import {
   parseResultItemRefsFromXml,
   parseResultsXmlRaw,
   resolveAssessmentHref,
+  resolveRelativePath,
 } from "qti-xml-core";
 ```
 

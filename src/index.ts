@@ -75,6 +75,21 @@ const normalizeRelativePath = (value: string): string => {
   return stack.join('/');
 };
 
+const normalizeRelativePathAllowParent = (value: string): string | null => {
+  const parts = value.replace(/\\/g, '/').split('/');
+  const stack: string[] = [];
+  for (const part of parts) {
+    if (!part || part === '.') continue;
+    if (part === '..') {
+      if (stack.length === 0) return null;
+      stack.pop();
+      continue;
+    }
+    stack.push(part);
+  }
+  return stack.join('/');
+};
+
 export const resolveAssessmentHref = (assessmentTestPath: string, href: string): string => {
   const testPath = normalizeRelativePath(assessmentTestPath);
   const baseDirParts = testPath.split('/');
@@ -82,6 +97,15 @@ export const resolveAssessmentHref = (assessmentTestPath: string, href: string):
   const baseDir = baseDirParts.join('/');
   const combined = baseDir ? `${baseDir}/${href}` : href;
   return normalizeRelativePath(combined);
+};
+
+export const resolveRelativePath = (baseFilePath: string, relativePath: string): string | null => {
+  const normalized = baseFilePath.replace(/\\/g, '/');
+  const segments = normalized.split('/');
+  segments.pop();
+  const baseDir = segments.join('/');
+  const combined = baseDir ? `${baseDir}/${relativePath}` : relativePath;
+  return normalizeRelativePathAllowParent(combined);
 };
 
 export const extractItemIdentifier = (xml: string): string | null => {
