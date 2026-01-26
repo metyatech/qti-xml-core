@@ -20,7 +20,14 @@ npm install github:metyatech/qti-xml-core
 ## Usage
 
 ```ts
-import { parseAssessmentTestXml, parseResultsXmlRaw, resolveAssessmentHref } from "qti-xml-core";
+import {
+  extractItemIdentifier,
+  parseAssessmentItemRefsFromXml,
+  parseAssessmentTestXml,
+  parseResultItemRefsFromXml,
+  parseResultsXmlRaw,
+  resolveAssessmentHref,
+} from "qti-xml-core";
 ```
 
 ## Development commands
