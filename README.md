@@ -10,7 +10,7 @@ the runtime's DOMParser.
 ## Install
 
 ```bash
-npm install github:metyatech/qti-xml-core
+npm install qti-xml-core
 ```
 
 ## Setup
