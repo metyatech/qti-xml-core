@@ -33,21 +33,9 @@ import {
 
 ## Development commands
 
-```bash
-npm run build
-npm test
-```
-
-## Environment variables
-
-None.
-
-## Publishing
-
-This repository is consumed via GitHub dependency (not published to npm).
-
-## Development Commands
 - Build: `npm run build`
 - Test: `npm run test`
-- Lint: `Not configured (no lint script in package.json).`
-
+- Lint: `npm run lint`
+- Format: `npm run format`
+- Typecheck: `npm run typecheck`
+- Verify (all checks): `npm run verify`
