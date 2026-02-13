@@ -11,16 +11,35 @@
   "bugs": {
     "url": "https://github.com/metyatech/qti-xml-core/issues"
   },
-  "keywords": ["qti", "qti3", "xml", "assessment", "parser"],
+  "keywords": [
+    "qti",
+    "qti3",
+    "xml",
+    "assessment",
+    "parser"
+  ],
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "type": "module",
   "exports": {
     ".": "./dist/index.js"
   },
   "types": "./dist/index.d.ts",
-  "files": ["dist", "README.md", "LICENSE", "package.json"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && node --test",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "verify": "npm run lint && npm run format:check && npm run typecheck && npm test",
     "prepack": "npm run build",
     "prepare": "npm run build"
   },
@@ -28,6 +47,10 @@
     "@xmldom/xmldom": "^0.9.8"
   },
   "devDependencies": {
-    "typescript": "^5"
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.8.1",
+    "typescript": "^5",
+    "typescript-eslint": "^8.54.0"
   }
 }
