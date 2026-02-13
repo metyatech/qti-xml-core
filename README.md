@@ -42,7 +42,7 @@ import {
 
 ## Publishing
 
-This repository is consumed via GitHub dependency (not published to npm).
+This package is published to npm as `qti-xml-core`.
 
 ## Related Documents
 

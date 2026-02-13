@@ -18,6 +18,9 @@
     "assessment",
     "parser"
   ],
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "type": "module",
   "exports": {
     ".": "./dist/index.js"
