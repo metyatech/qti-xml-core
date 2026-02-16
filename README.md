@@ -33,21 +33,21 @@ import {
 
 ## Development commands
 
-```bash
-npm run build
-npm test
-```
-
-## Environment variables
-
-None.
+- Build: `npm run build`
+- Test: `npm test`
+- Lint: `npm run lint`
+- Format: `npm run format`
+- Typecheck: `npm run typecheck`
+- Verify (all checks): `npm run verify`
 
 ## Publishing
 
-This repository is consumed via GitHub dependency (not published to npm).
+This package is published to npm as `qti-xml-core`.
 
-## Development Commands
-- Build: `npm run build`
-- Test: `npm run test`
-- Lint: `Not configured (no lint script in package.json).`
+## Related Documents
 
+- [LICENSE](./LICENSE)
+- [CHANGELOG](./CHANGELOG.md)
+- [SECURITY](./SECURITY.md)
+- [CONTRIBUTING](./CONTRIBUTING.md)
+- [CODE_OF_CONDUCT](./CODE_OF_CONDUCT.md)
