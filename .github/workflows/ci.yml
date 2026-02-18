@@ -21,6 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: google/osv-scanner-action@v1
+      - uses: google/osv-scanner-action@v1.9.2
         with:
-          scan-args: ./
+          scan-args: |-
+            --lockfile=package-lock.json
+            .
