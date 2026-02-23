@@ -1,6 +1,6 @@
 {
   "name": "qti-xml-core",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Minimal, dependency-free helpers for parsing QTI 3.0 XML with DOMParser.",
   "license": "MIT",
   "repository": {
