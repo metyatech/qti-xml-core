@@ -35,11 +35,11 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && node --test",
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
-    "verify": "npm run lint && npm run format:check && npm run typecheck && npm test",
+    "verify": "npm run lint && npm run format:check && npm run typecheck && npm test && npm audit",
     "prepack": "npm run build",
     "prepare": "npm run build"
   },

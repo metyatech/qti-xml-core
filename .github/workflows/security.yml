@@ -1,0 +1,19 @@
+name: Security Analysis
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  schedule:
+    - cron: "20 4 * * 1"
+
+jobs:
+  osv-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: OSV-Scanner Analysis
+        uses: google/osv-scanner-action/osv-scanner-action@v1
+        with:
+          scan-args: ./
